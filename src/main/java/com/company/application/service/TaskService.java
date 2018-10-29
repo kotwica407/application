@@ -25,7 +25,7 @@ public class TaskService {
     }
 
     public List<Task> findTaskByWorkerId(int id){
-        List<Task> tasks = new ArrayList<Task>();
+        List<Task> tasks = new ArrayList<>();
         for(Task task : taskRepository.findAll()){
             if(task.getIdWorker()==id)
                 tasks.add(task);

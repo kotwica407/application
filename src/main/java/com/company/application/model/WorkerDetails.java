@@ -30,7 +30,7 @@ public class WorkerDetails extends Worker implements UserDetails {
 
     @Override
     public String getUsername() {
-        return super.getEmail();
+        return super.getLogin();
     }
 
     @Override

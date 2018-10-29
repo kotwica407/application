@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Spring 4 Security + Thymeleaf Integration Example </title>
+</head>
+<body>
+<h3> Spring 4 Security + Thymeleaf Integration Example </h3>
+<p th:if="${param.error}">
+    Zły login lub hasło
+</p>
+<form th:action="@{/app-login}" method="POST">
+    Username : <input type="text" name="app-username"/> <br/><br/>
+    Password: <input type="password" name="app-password"/> <br/><br/>
+    <input type="submit" value="Login"/>
+</form>
+</body>
+</html>

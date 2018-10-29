@@ -1,6 +1,8 @@
 package com.company.application.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Objects;
@@ -18,6 +20,9 @@ public class Worker {
     private String login;
     private String password;
     private String email;
+    private String confirmationToken;
+
+    public Worker(){}
 
     public Worker(Worker worker) {
         this.idWorker = worker.idWorker;
@@ -31,9 +36,11 @@ public class Worker {
         this.login = worker.login;
         this.password = worker.password;
         this.email = worker.email;
+        this.confirmationToken = worker.confirmationToken;
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_worker")
     public int getIdWorker() {
         return idWorker;
@@ -54,7 +61,8 @@ public class Worker {
     }
 
     @Basic
-    @Column(name = "login")
+    @NotEmpty
+    @Column(name = "login", nullable = false, unique = true)
     public String getLogin() {
         return login;
     }
@@ -64,17 +72,29 @@ public class Worker {
     }
 
     @Basic
+    @Column(name = "confirmation_token")
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
+
+    @Basic
     @Column(name = "password")
     public String getPassword() {
         return password;
     }
 
-    public void setPesel(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     @Basic
-    @Column(name = "email")
+    @Email
+    @NotEmpty
+    @Column(name = "email", nullable = false, unique = true)
     public String getEmail() {
         return email;
     }
@@ -157,11 +177,12 @@ public class Worker {
                 Objects.equals(salary, worker.salary) &&
                 Objects.equals(hiredate, worker.hiredate) &&
                 Objects.equals(login, worker.login) &&
-                Objects.equals(email, worker.email);
+                Objects.equals(email, worker.email) &&
+                Objects.equals(confirmationToken, worker.confirmationToken);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idWorker, pesel, name, lastname, position, department, salary, hiredate, login, email);
+        return Objects.hash(idWorker, pesel, name, lastname, position, department, salary, hiredate, login, email, confirmationToken);
     }
 }
