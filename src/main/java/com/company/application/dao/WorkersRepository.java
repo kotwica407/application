@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface WorkersRepository extends JpaRepository<Worker, Integer> {
 
     Optional<Worker> findByLogin(String login);
+    Optional<Worker> findByEmail(String email);
 }

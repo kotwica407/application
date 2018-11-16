@@ -29,7 +29,7 @@
 
         <h4>New User Registration</h4>
 
-        <form autocomplete="off" action="#" th:action="@{/formularz}"
+        <form autocomplete="off" action="#" th:action="@{/admin/new-worker}"
               th:object="${worker}" method="post" class="m-t" role="form"
               data-toggle="validator">
 
@@ -72,15 +72,24 @@
 
             </div>
 
-            <div class="form-group input-group has-feedback">
-            <span class="input-group-addon">
-            <span class="glyphicon glyphicon-user"></span>
-          </span>
-                <input type="text" th:field="*{position}"
-                       placeholder="Position" class="form-control" required />
-                <span class="glyphicon form-control-feedback"
-                      aria-hidden="true"></span>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label>Department</label>
+                    <select type="text" th:field="*{department}"/>
+                    <option selected></option>
+                    <option>uruchamiania</option>
+                    <option>marketing</option>
+                    <option>B+R</option>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <input type="text" th:field="*{position}" th:placeholder="Position" th:class="form-control" required>
+                </div>
             </div>
+
+
+
+
 
             <div class="form-group input-group has-feedback">
             <span class="input-group-addon">
@@ -114,7 +123,7 @@
 
             <div class="form-group input-group has-feedback">
             <span class="input-group-addon">
-            <span class="glyphicon glyphicon-user"></span>
+            <span class="glyphicon glyphicon-lock"></span>
           </span>
                 <input type="password" th:field="*{password}"
                        placeholder="Password" class="form-control" required />

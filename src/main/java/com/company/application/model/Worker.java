@@ -20,7 +20,6 @@ public class Worker {
     private String login;
     private String password;
     private String email;
-    private String confirmationToken;
 
     public Worker(){}
 
@@ -36,7 +35,6 @@ public class Worker {
         this.login = worker.login;
         this.password = worker.password;
         this.email = worker.email;
-        this.confirmationToken = worker.confirmationToken;
     }
 
     @Id
@@ -71,15 +69,6 @@ public class Worker {
         this.login = login;
     }
 
-    @Basic
-    @Column(name = "confirmation_token")
-    public String getConfirmationToken() {
-        return confirmationToken;
-    }
-
-    public void setConfirmationToken(String confirmationToken) {
-        this.confirmationToken = confirmationToken;
-    }
 
     @Basic
     @Column(name = "password")
@@ -177,12 +166,11 @@ public class Worker {
                 Objects.equals(salary, worker.salary) &&
                 Objects.equals(hiredate, worker.hiredate) &&
                 Objects.equals(login, worker.login) &&
-                Objects.equals(email, worker.email) &&
-                Objects.equals(confirmationToken, worker.confirmationToken);
+                Objects.equals(email, worker.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idWorker, pesel, name, lastname, position, department, salary, hiredate, login, email, confirmationToken);
+        return Objects.hash(idWorker, pesel, name, lastname, position, department, salary, hiredate, login, email);
     }
 }

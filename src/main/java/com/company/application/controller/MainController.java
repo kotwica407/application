@@ -46,20 +46,21 @@ public class MainController {
         return "custom-login";
     }
 
-    @GetMapping("/formularz")
+    @GetMapping("/admin/new-worker")
     public ModelAndView formularz(ModelAndView modelAndView, Worker worker){
         modelAndView.addObject("worker", worker);
         modelAndView.setViewName("formularz");
         return modelAndView;
     }
 
-    @PostMapping("/formularz")
+    @PostMapping("/admin/new-worker")
     public ModelAndView processFormularz(ModelAndView modelAndView, @Valid Worker worker, String password, BindingResult bindingResult, HttpServletRequest request){
         modelAndView.addObject("worker", worker);
-        Optional<Worker> workerExists = workerService.findByLogin(worker.getLogin());
+        Optional<Worker> workerExistsLogin = workerService.findByLogin(worker.getLogin());
+        Optional<Worker> workerExistsEmail = workerService.findByEmail(worker.getEmail());
 
-        if(workerExists.isPresent()){
-            modelAndView.addObject("errorMessage", "Oops!  There is already a user registered with the login provided.");
+        if(workerExistsLogin.isPresent() || workerExistsEmail.isPresent()){
+            modelAndView.addObject("errorMessage", "Oops!  There is already a user registered with the login or email address provided.");
             modelAndView.setViewName("formularz");
             bindingResult.reject("login");
         }
@@ -68,10 +69,10 @@ public class MainController {
             modelAndView.setViewName("formularz");
         }
         else {
-            worker.setConfirmationToken(UUID.randomUUID().toString());
             worker.setPassword(bCryptPasswordEncoder.encode(worker.getPassword()));
             worker.setHiredate(new java.sql.Date(new java.util.Date().getTime()));
             workerService.saveWorker(worker);
+            modelAndView.setViewName("formularz");
         }
         return modelAndView;
     }

@@ -31,6 +31,10 @@ public class WorkerService implements UserDetailsService {
         return workersRepository.findByLogin(login);
     }
 
+    public Optional<Worker> findByEmail(String email){
+        return workersRepository.findByLogin(email);
+    }
+
     public HashMap<String, String> findAll(){
         HashMap<String,String> workers = new HashMap<>();
         for(Worker worker: workersRepository.findAll()){
