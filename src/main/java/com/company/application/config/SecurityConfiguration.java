@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .defaultSuccessUrl("/")
                 .and().logout()
-                    .logoutUrl("app-logout")
+                    .logoutUrl("/logout")
                     .logoutSuccessUrl("/login")
                 .and().exceptionHandling()
                     .accessDeniedPage("/error");

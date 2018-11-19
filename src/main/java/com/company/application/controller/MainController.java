@@ -6,7 +6,10 @@ import com.company.application.service.TaskService;
 import com.company.application.service.WorkerService;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -37,13 +42,26 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String home(HttpServletRequest request){
-        return "index";
+    public ModelAndView home(ModelAndView modelAndView, Principal principal){
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
 
     @GetMapping("/login")
     public String login(){
         return "custom-login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/login";
     }
 
     @GetMapping("/admin/new-worker")
@@ -77,4 +95,22 @@ public class MainController {
         return modelAndView;
     }
 
+    @GetMapping("/my-tasks")
+    public ModelAndView myTasks(ModelAndView modelAndView, Principal principal) {
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
+        modelAndView.addObject("tasks", taskService.findTaskByWorkerId(worker.get().getIdWorker()));
+        modelAndView.setViewName("my-tasks");
+        return modelAndView;
+    }
+
+    @GetMapping("/give-task")
+    public ModelAndView giveTask(ModelAndView modelAndView, Principal principal){
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
+        modelAndView.setViewName("give-task");
+        return modelAndView;
+    }
 }

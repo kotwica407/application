@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Moje zadania</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <span class="navbar-text" th:text="${name}">
+        </span>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Main Window</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container text-center" id="taskDiv">
+    <div class="jumbotron text-center">
+        <h3>My tasks</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-left">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>WhatToDo</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasks}">
+                    <td th:text="${task.idTask}">ID</td>
+                    <td th:text="${task.whattodo}">Name</td>
+                    <td th:text="${task.deadline}">Description</td>
+                    <td th:text="${task.status}">Date Created</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
