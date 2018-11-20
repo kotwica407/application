@@ -21,5 +21,29 @@
         </div>
     </div>
 </nav>
+
+
+<div class="container text-center">
+    <h3>New Task</h3>
+    <form class="form-horizontal" th:object="${task}" method="post" th:action="@{'/give-task'(idWorker=${idWorker})}">
+        <input type="hidden" name="idTask" th:field="*{idTask}"/>
+        <div class="form-group">
+            <label class="control-label col-md-3">Whattodo</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" th:maxlength="85" th:placeholder="Whattodo" th:field="*{whattodo}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3">Deadline</label>
+            <div class="col-md-5">
+                <input type="date" class="form-control" th:field="*{deadline}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Give task"/>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>

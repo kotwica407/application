@@ -21,8 +21,10 @@ public class WorkerService implements UserDetailsService {
     public List<Worker> findAllByDepartment(String department){
         List<Worker> workers = new ArrayList<>();
         for(Worker worker: workersRepository.findAll()){
-            if(worker.getDepartment().equals(department))
-                workers.add(worker);
+            //sprawdzam czy NULL, bo null nie jest Stringiem
+            if(worker.getDepartment()!=null)
+                if(worker.getDepartment().equals(department))
+                    workers.add(worker);
         }
         return workers;
     }
@@ -32,15 +34,20 @@ public class WorkerService implements UserDetailsService {
     }
 
     public Optional<Worker> findByEmail(String email){
-        return workersRepository.findByLogin(email);
+        return workersRepository.findByEmail(email);
     }
 
-    public HashMap<String, String> findAll(){
-        HashMap<String,String> workers = new HashMap<>();
+    public List<Worker> findAll(){
+        List<Worker> workers = new ArrayList<>();
         for(Worker worker: workersRepository.findAll()){
-            workers.put(worker.getLogin(),worker.getPassword());
+            workers.add(worker);
         }
         return workers;
+    }
+
+    public Optional<Worker> findWorkerById(int id){
+        Optional<Worker> worker = workersRepository.findById(id);
+        return worker;
     }
 
     public void saveWorker(Worker worker){

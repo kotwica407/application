@@ -1,5 +1,6 @@
 package com.company.application.controller;
 
+import com.company.application.model.Task;
 import com.company.application.model.Worker;
 import com.company.application.service.EmailService;
 import com.company.application.service.TaskService;
@@ -13,10 +14,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,16 +99,44 @@ public class MainController {
         Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
         modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
         modelAndView.addObject("tasks", taskService.findTaskByWorkerId(worker.get().getIdWorker()));
-        modelAndView.setViewName("my-tasks");
+        modelAndView.setViewName("tasks");
         return modelAndView;
     }
 
     @GetMapping("/give-task")
-    public ModelAndView giveTask(ModelAndView modelAndView, Principal principal){
+    public ModelAndView giveTask(@RequestParam int idWorker, ModelAndView modelAndView, Principal principal){
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        modelAndView.addObject("idWorker", idWorker);
+        modelAndView.addObject("task", new Task());
+        modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
+        modelAndView.setViewName("give-task");
+        return modelAndView;
+    }
+
+    @PostMapping("/give-task")
+    public String saveTask(@RequestParam int idWorker, @ModelAttribute Task task, BindingResult bindingResult){
+        task.setIdWorker(idWorker);
+        taskService.save(task);
+        return "my-inferiors";
+    }
+
+    @GetMapping("/my-inferiors")
+    public ModelAndView myInferiors(ModelAndView modelAndView, Principal principal){
         final String loggedInUserName = principal.getName();
         Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
         modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
-        modelAndView.setViewName("give-task");
+        modelAndView.addObject("inferiors", workerService.findAllByDepartment(worker.get().getDepartment()));
+        modelAndView.setViewName("my-inferiors");
+        return modelAndView;
+    }
+
+    @GetMapping("/tasks")
+    public ModelAndView tasks(@RequestParam int idWorker, ModelAndView modelAndView, Principal principal){
+        Optional<Worker> worker = workerService.findWorkerById(idWorker);
+        modelAndView.addObject("name", workerService.findByLogin(principal.getName()).get().getName()+" "+workerService.findByLogin(principal.getName()).get().getLastname());
+        modelAndView.addObject("tasks", taskService.findTaskByWorkerId(worker.get().getIdWorker()));
+        modelAndView.setViewName("tasks");
         return modelAndView;
     }
 }
