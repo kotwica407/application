@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Mój profil</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/my-profile (mode='data')}" th:text="${name}"></a>
+        </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Main Window</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="jumbotron text-left">
+                <div class="row">
+                    <a th:href="@{/my-profile (mode='data')}">Data</a>
+                </div>
+                <div class="row">
+                    <a th:href="@{/my-profile (mode='change-password')}">Change password</a>
+                </div>
+                <div class="row">
+                    <a th:href="@{/my-profile (mode='change-email')}">Change email address</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div th:switch="${mode}">
+                <div th:case="data">
+                    <div class="container text-center" id="taskDiv">
+                        <div class="jumbotron text-center">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped text-left">
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="Name">Name</td>
+                                        <td th:text="${worker.get().name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="Lastname">Lastname</td>
+                                        <td th:text="${worker.get().lastname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="Email">Email</td>
+                                        <td th:text="${worker.get().email}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="Department">Department</td>
+                                        <td th:text="${worker.get().department} ?: ''"></td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="Salary">Salary</td>
+                                        <td th:text="${worker.get().salary}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="Login">Login</td>
+                                        <td th:text="${worker.get().login}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="change-password">
+                    <div class="container text-center">
+                        <div class="jumbotron text-center">
+                            <form autocomplete="off" action="#" th:action="@{/change-password}"
+                                  th:object="${password}" method="post" class="m-t" role="form"
+                                  data-toggle="validator">
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                    </span>
+                                    <input name="password" type="password" id="password" th:placeholder="Password" class="form-control" required />
+                                    <span class="glyphicon" aria-hidden="true"></span>
+                                </div>
+
+                                <div class="form-group input-group has-feedback">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                    </span>
+                                    <input type="password" class="form-control" id="signup-password-confirm"
+                                           placeholder="Confirm Password" name="ConfirmPassword"
+                                           data-fv-notempty="true" data-fv-notempty-message="Please confirm password"
+                                           data-fv-identical="true"
+                                           data-fv-identical-field="password"
+                                           data-fv-identical-message="Both passwords must be identical"/>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary block full-width m-b">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="change-email">
+                    <div class="container text-center">
+                        <div class="jumbotron text-center">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

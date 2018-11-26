@@ -14,8 +14,9 @@
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
-        <span class="navbar-text" th:text="${name}">
-        </span>
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/my-profile (mode='data')}" th:text="${name}"></a>
+        </div>
         <div class="navbar-header">
             <a class="navbar-brand" href="/">Main Window</a>
         </div>

@@ -5,14 +5,12 @@ import com.company.application.model.Worker;
 import com.company.application.service.EmailService;
 import com.company.application.service.TaskService;
 import com.company.application.service.WorkerService;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -137,6 +135,36 @@ public class MainController {
         modelAndView.addObject("name", workerService.findByLogin(principal.getName()).get().getName()+" "+workerService.findByLogin(principal.getName()).get().getLastname());
         modelAndView.addObject("tasks", taskService.findTaskByWorkerId(worker.get().getIdWorker()));
         modelAndView.setViewName("tasks");
+        return modelAndView;
+    }
+
+    @GetMapping("/my-profile")
+    public ModelAndView myProfile(@RequestParam String mode, ModelAndView modelAndView, Principal principal, String password, String email){
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        modelAndView.addObject("name", worker.get().getName()+" "+worker.get().getLastname());
+        modelAndView.addObject("worker",worker);
+        modelAndView.addObject("mode",mode);
+        modelAndView.addObject("password", password);
+        modelAndView.addObject("email", email);
+        modelAndView.setViewName("my-profile");
+        return modelAndView;
+    }
+
+    @PostMapping("/change-password")
+    public ModelAndView changePassword(ModelAndView modelAndView, BindingResult bindingResult, @Valid String password, Principal principal){
+        modelAndView.addObject("password",password);
+        final String loggedInUserName = principal.getName();
+        Optional<Worker> worker = workerService.findByLogin(loggedInUserName);
+        System.out.println("Ustawiam haslo" + password);
+        worker.get().setPassword(bCryptPasswordEncoder.encode(password));
+        workerService.saveWorker(worker.get());
+        modelAndView.setViewName("my-profile");
+        return modelAndView;
+    }
+
+    @PostMapping("/change-email")
+    public ModelAndView changeEmail(ModelAndView modelAndView, BindingResult bindingResult, @Valid String email){
         return modelAndView;
     }
 }
